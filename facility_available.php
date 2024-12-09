@@ -1,6 +1,7 @@
 <?php
-// Include configuration and session handling
-include('initialize.php');
+
+require_once('config.php');
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -38,16 +39,6 @@ $location_result = mysqli_query($conn, $location_query);
 </head>
 <body>
 
-<header>
-    <div class="container header-container">
-        <h1 class="logo">Turf Dashboard</h1>
-        <nav>
-            <a href="login.php">Login</a>
-            <a href="signup.php" class="signup-btn">Sign Up</a>
-        </nav>
-    </div>
-</header>
-
 <!-- Full-Screen Carousel Section -->
 <section class="carousel-section">
     <div id="turfCarousel" class="carousel slide" data-ride="carousel">
@@ -62,7 +53,7 @@ $location_result = mysqli_query($conn, $location_query);
                 echo '<div class="carousel-caption d-none d-md-block">';
                 echo '<h5>' . htmlspecialchars($row['turf_name']) . '</h5>';
                 echo '<h6>' . htmlspecialchars($row['location']) . '</h6>';
-                echo '<a href="view_facility.php?id=' . $row['turf_id'] . '" class="btn btn-primary">View Turf</a>';
+                echo '<a href="./?p=view_facility&TurfID=' . $row['turf_id'] . '" class="btn btn-primary">View Turf</a>';
                 echo '</div></div>';
                 $first = false;
             }
@@ -82,7 +73,7 @@ $location_result = mysqli_query($conn, $location_query);
 <!-- Filter and Turf Listings Section -->
 <section class="turf-listings">
     <div class="container text-center">
-        <form method="get" action="dashboard.php" class="filter-form">
+        <form method="get" action="facility_available.php" class="filter-form">
             <label for="location">Filter by Location:</label>
             <select name="location" id="location" class="form-control">
                 <option value="">All Locations</option>
@@ -106,7 +97,7 @@ $location_result = mysqli_query($conn, $location_query);
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($row['turf_name']) ?></h5>
                                 <p class="card-text"><?= htmlspecialchars($row['description']) ?></p>
-                                <a href="view_facility.php?TurfID=<?= $row['turf_id'] ?>" class="btn btn-primary">View Details</a>
+                                <a href="./?p=view_facility&TurfID=<?= $row['turf_id'] ?>" class="btn btn-primary">View Details</a>
 
                             </div>
                         </div>
@@ -119,7 +110,6 @@ $location_result = mysqli_query($conn, $location_query);
         </div>
     </div>
 </section>
-
 
 </body>
 </html>

@@ -3,8 +3,11 @@
 <html lang="en">
 <?php require_once('inc/header.php') ?>
 <body>
-<?php $page = isset($_GET['p']) ? $_GET['p'] : 'home';  ?>
-<?php require_once('inc/topBarNav.php') ?>
+<?php $page = isset($_GET['p']) ? $_GET['p'] : 'home'; 
+
+echo $page;
+?>
+
      <?php if($_settings->chk_flashdata('success')): ?>
       <script>
         alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
@@ -13,11 +16,11 @@
 <?php 
     if(!file_exists($page.".php") && !is_dir($page)){
         include '404.html';
-    }else{
-      if(is_dir($page))
+    }else { 
+      if(is_dir($page))    
         include $page.'/index.php';
       else
-        include $page.'.php';
+     include $page.'.php';     
     }
 ?>
 <?php require_once('inc/footer.php') ?>

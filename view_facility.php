@@ -1,6 +1,4 @@
 <?php
-// Database Connection
-include 'config.php'; // Ensure this file contains your database connection code
 
 // Check if TurfID is set and valid
 if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
@@ -19,6 +17,28 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
         // Fetch images associated with the turf
         $image1 = $turfDetails['image'];
         $image2 = $turfDetails['image_2'];
+
+        // Fetch turf-specific amenities
+        $amenitiesQuery = "SELECT a.amenity_name 
+                           FROM turf_amenities ta 
+                           JOIN amenities a ON ta.amenity_id = a.amenity_id 
+                           WHERE ta.turf_id = ?";
+        $amenitiesStmt = $conn->prepare($amenitiesQuery);
+        $amenitiesStmt->bind_param("i", $turf_id);
+        $amenitiesStmt->execute();
+        $amenitiesResult = $amenitiesStmt->get_result();
+
+        // Fetch default amenities if turf has no specific amenities
+        if ($amenitiesResult->num_rows === 0) {
+            $defaultQuery = "SELECT amenity_name FROM amenities WHERE is_default = 1";
+            $amenitiesResult = $conn->query($defaultQuery);
+        }
+
+        // Store amenities in an array
+        $amenities = [];
+        while ($row = $amenitiesResult->fetch_assoc()) {
+            $amenities[] = $row['amenity_name'];
+        }
     } else {
         // Handle invalid TurfID by redirecting or showing an error
         header("Location: facility_available.php"); // Redirect to facility_available.php for invalid TurfID
@@ -30,6 +50,7 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
     exit;
 }
 ?>
+
 
 
 
@@ -248,24 +269,53 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
                     </div>
                     <div class="card">
                         <h5 class="card-title">Amenities</h5>
-                        <p class="card-text"><?php echo htmlspecialchars($turfDetails['amenities']); ?></p>
+                        <p class="card-text">
+                            <?php 
+                            if (!empty($amenities)) {
+                                echo htmlspecialchars(implode(', ', $amenities));
+                            } else {
+                                echo "No amenities available.";
+                            }
+                        ?>
+                        </p>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+
 </section>
 
 
 <script>
     
-  $(function(){
-    $('#book_now').click(function(){
-        if("<?= $_settings->userdata('id') && $_settings->userdata('login_type') == 2 ?>" == 1)
-            uni_modal("Book Facility","booking.php?fid=<?= $turf_id ?>",'modal-sm');
-        else
-        location.href = './login.php';
-    })
-  })
+    $(function() {
+    $('#book_now').click(function() {
+        if("<?= $_settings->userdata('id') && $_settings->userdata('login_type') == 2 ?>" == 1) {
+            // Open the booking modal
+            uni_modal("Book Facility", "booking.php?fid=<?= $turf_id ?>", 'modal-sm');
+        } else {
+            // Redirect to login page
+            location.href = './login.php';
+        }
+    });
+
+    // Date change event to fetch available slots for the selected date
+    $('#booking_date').change(function() {
+        var selectedDate = $(this).val();
+        $.ajax({
+            url: 'fetch_slots.php', // PHP file that fetches available slots for the selected date
+            type: 'POST',
+            data: { turf_id: <?= $turf_id ?>, date: selectedDate },
+            success: function(response) {
+                // Update the available slots dropdown based on the response
+                $('#time_slots').html(response);
+            }
+        });
+    });
+});
+
 
 </script>
