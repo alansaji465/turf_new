@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2024 at 07:47 AM
+-- Generation Time: Dec 08, 2024 at 01:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,9 @@ INSERT INTO `booking_list` (`id`, `ref_code`, `client_id`, `facility_id`, `date_
 (2, '202203-00002', 1, 2, '2022-03-24', '2022-03-25', 1, '2022-03-23 13:30:40', '2022-03-23 13:49:11'),
 (3, '202203-00003', 2, 4, '2022-03-24', '2022-03-25', 1, '2022-03-23 15:40:58', '2022-03-23 15:41:59'),
 (4, '202203-00004', 2, 1, '2022-03-28', '2022-03-28', 3, '2022-03-23 15:41:17', '2022-03-23 15:41:26'),
-(5, '202412-00001', 3, 1, '2024-12-04', '2024-12-05', 0, '2024-12-04 17:43:36', NULL);
+(5, '202412-00001', 3, 1, '2024-12-04', '2024-12-05', 0, '2024-12-04 17:43:36', NULL),
+(6, '202412-00002', 37, 1, '2024-12-16', '2024-12-08', 0, '2024-12-07 00:36:24', NULL),
+(7, '202412-00003', 3, 1, '2024-12-09', '2024-12-10', 0, '2024-12-08 15:12:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -90,13 +92,13 @@ CREATE TABLE `client_list` (
   `id` int(30) NOT NULL,
   `firstname` text NOT NULL,
   `middlename` text DEFAULT NULL,
-  `lastname` text NOT NULL,
-  `gender` text NOT NULL,
-  `contact` text NOT NULL,
-  `address` text NOT NULL,
+  `lastname` text DEFAULT NULL,
+  `gender` text DEFAULT NULL,
+  `contact` varchar(50) DEFAULT NULL,
+  `address` text DEFAULT NULL,
   `email` text NOT NULL,
   `password` text NOT NULL,
-  `image_path` text DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `delete_flag` tinyint(1) NOT NULL DEFAULT 0,
   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
@@ -110,7 +112,10 @@ CREATE TABLE `client_list` (
 INSERT INTO `client_list` (`id`, `firstname`, `middlename`, `lastname`, `gender`, `contact`, `address`, `email`, `password`, `image_path`, `status`, `delete_flag`, `date_created`, `date_added`) VALUES
 (1, 'Mark', 'D', 'Male', '', '09123456789', 'Sample Address', 'mcooper@sample.com', 'c7162ff89c647f444fcaa5c635dac8c3', 'uploads/clients/1.png?v=1648008107', 1, 0, '2022-03-23 12:01:47', '2022-03-23 12:01:47'),
 (2, 'Samantha', 'C', 'Miller', 'Male', '09456789123', 'Sample Address only', 'sam23@gmail.com', '56fafa8964024efa410773781a5f9e93', 'uploads/clients/2.png?v=1648021231', 1, 0, '2022-03-23 15:40:31', '2022-03-23 15:44:07'),
-(3, 'amal', '', 'saji', 'Male', '6282330119', 'Ned', 'amal@gmail.com', '16b5480e7b6e68607fe48815d16b5d6d', NULL, 1, 0, '2024-12-04 17:42:30', NULL);
+(3, 'amal', '', 'saji', 'Male', '6282330119', 'Ned', 'amal@gmail.com', '16b5480e7b6e68607fe48815d16b5d6d', NULL, 1, 0, '2024-12-04 17:42:30', NULL),
+(31, 'a', NULL, NULL, NULL, NULL, NULL, 'alansaji142@gmail.com', '0cc175b9c0f1b6a831c399e269772661', NULL, 1, 0, '2024-12-07 00:02:16', NULL),
+(33, 'amal', NULL, NULL, NULL, NULL, NULL, 'healthytouch77@gmail.com', '0cc175b9c0f1b6a831c399e269772661', NULL, 1, 0, '2024-12-07 00:11:00', NULL),
+(37, 'A', NULL, NULL, NULL, NULL, NULL, 'qwe@gmail.com', '7fc56270e7a70fa81a5935b72eacbe29', NULL, 1, 0, '2024-12-07 00:32:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -160,11 +165,45 @@ CREATE TABLE `system_info` (
 --
 
 INSERT INTO `system_info` (`id`, `meta_field`, `meta_value`) VALUES
-(1, 'name', 'Sports Complex Booking System'),
-(6, 'short_name', 'SCBS - PHP'),
-(11, 'logo', 'uploads/system-logo.png?v=1648002319'),
+(1, 'name', 'Turf Booking'),
+(6, 'short_name', 'Turfico'),
+(11, 'logo', 'uploads/turf_logo.png'),
 (13, 'user_avatar', 'uploads/user_avatar.jpg'),
 (14, 'cover', 'uploads/system-cover.png?v=1648002561');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `turfs`
+--
+
+CREATE TABLE `turfs` (
+  `turf_id` int(11) NOT NULL,
+  `turf_name` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `location` varchar(150) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `status` enum('available','booked') NOT NULL DEFAULT 'available',
+  `image_2` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `turfs`
+--
+
+INSERT INTO `turfs` (`turf_id`, `turf_name`, `description`, `location`, `image`, `price`, `status`, `image_2`) VALUES
+(1, 'Sparta Arena', 'Sparta Arena hosts a lot of semi-professional games. It also has cricket and beach volleyball facilities in the complex.', 'Oruvathilkotta, Thiruvananthapuram', 'assets\\images\\turf-images\\sparta-arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\sparta-arena-1.jpeg'),
+(2, 'Sporthood Turfpark', 'Sporthood Turfpark can simultaneously host 7-a-side and 5-a-side games. It is close to the biggest shopping mall in Kerala and has great access from the city’s arterial roads.', 'Edappally, Kochi', 'assets\\images\\turf-images\\sporthood-turfpark-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\sporthood-turfpark-1.jpeg'),
+(3, 'Gamma Football', 'Gamma Football has a FIFA-approved 3G artificial turf that’s designed to soften impact on the joints and decrease the likelihood of injury. They have a women\'s football programme called Gamma Girls.', 'Chilavannoor, Ernakulam', 'assets\\images\\turf-images\\gamma-football-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\gamma-football-1.jpeg'),
+(4, 'Parkway', 'Located in the heart of Kochi, Parkway is a multi-sport centre and a popular gathering place for sports enthusiasts in the city.', 'Kalamassery, Kochi', 'assets\\images\\turf-images\\parkway-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\parkway-1.jpeg'),
+(5, 'MTM Sports', 'Located at the heart of Ponnani, a place of historical importance, MTM Sports Village is Malabar’s first multi-sport arena. It was designed to be a community centre and has a wide range of sports: football, cricket, tennis, swimming, roller skating, basketball, badminton, volleyball, table tennis and beach volleyball.', 'Ponnani, Malappuram', 'assets\\images\\turf-images\\MTM-sports-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\MTM-sports-1.jpeg'),
+(6, 'Lake Zone', 'Lake Zone is a very good facility in Kolathara. The 5-a-side football turf is by the river. The place is well-known for water sports and boat rides.', 'Kolathara, Kozhikode', 'assets\\images\\turf-images\\Lake-Zone-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Lake-Zone-1.jpeg'),
+(7, 'Just Futsal', 'Just Futsal is a stunning turf overlooking Thrissur City. It is equipped with a state-of-the-art FIFA-standard synthetic turf and excellent lighting.', 'Shobha City Mall, Thrissur', 'assets\\images\\turf-images\\Just-Futsal-2.jpg', 1500.00, 'available', 'assets\\images\\turf-images\\Just-Futsal-1.jpeg'),
+(8, 'Goal Castle', 'Vazhakkad and its neighbouring areas have produced many state and national players -- U Sharafali (former Indian player), Ijaz Ali (Indian Junior Team), Hanan Javed (Indian Junior Team), Shakkeer Manuppa (former Kerala Blasters), Shabaz Saleel (India U-21). Goal Castle is one of the first artificial turfs in Malabar region. Good for 5-a-side matches.', 'Vazhakkad, Kozhikode', 'assets\\images\\turf-images\\Goal-Castle-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Goal-Castle-1.jpg'),
+(9, 'Sporthood Espirito', 'Sporthood Espirito was the first turf in Kakkanad area. It is easily accessible from Infopark, an IT park complex in Kochi.', 'Kakkanad, Kochi', 'assets\\images\\turf-images\\Sporthood-Espirito-2.jpg', 800.00, 'available', 'assets\\images\\turf-images\\Sporthood-Espirito-1.jpeg'),
+(10, 'Cochin Sports Arena', 'Cochin Sports Arena is the biggest 7-a-side ground in the locality and easily accessible from main areas like Kakkanad, Palarivattom and Edapally', 'Edappally, Kochi', 'assets\\images\\turf-images\\Cochin-Sports-Arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Cochin-Sports-Arena-1.jpeg'),
+(11, 'Calicut Arena', 'Calicut Arena is one of the best and biggest turfs in the city of Calicut. The arena has two independent courts; one for 7-a-side and one for 5-a-side.', 'Moozhikkal, Kozhikode', 'assets\\images\\turf-images\\Calicut-Arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Calicut-Arena-1.jpeg');
 
 -- --------------------------------------------------------
 
@@ -232,6 +271,12 @@ ALTER TABLE `system_info`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `turfs`
+--
+ALTER TABLE `turfs`
+  ADD PRIMARY KEY (`turf_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -245,7 +290,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `booking_list`
 --
 ALTER TABLE `booking_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `category_list`
@@ -257,7 +302,7 @@ ALTER TABLE `category_list`
 -- AUTO_INCREMENT for table `client_list`
 --
 ALTER TABLE `client_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `facility_list`
@@ -270,6 +315,12 @@ ALTER TABLE `facility_list`
 --
 ALTER TABLE `system_info`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `turfs`
+--
+ALTER TABLE `turfs`
+  MODIFY `turf_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`

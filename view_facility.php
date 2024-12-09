@@ -1,49 +1,37 @@
 <?php
-// Connect to the database
-include_once("config.php");
+// Database Connection
+include 'config.php'; // Ensure this file contains your database connection code
 
-if(isset($_GET['TurfID']) && $_GET['TurfID'] > 0){
-    $qry = $conn->query("SELECT * FROM `turfs` WHERE turf_id = '{$_GET['TurfID']}' ");
-    if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=stripslashes($v);
-        }
-    }
-}
+// Check if TurfID is set and valid
+if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
+    $turf_id = intval($_GET['TurfID']); // Sanitize TurfID by converting it to an integer
 
-
-// Ensure TurfID is set and sanitized
-if (isset($_GET['TurfID'])) {
-    $TurfID = intval($_GET['TurfID']);  // Convert to integer for security
-
-    // Query the database for turf details
-    $turfQuery = "SELECT * FROM turfs WHERE turf_id = ?";
-    $stmt = $conn->prepare($turfQuery);
-    $stmt->bind_param("i", $TurfID);
+    // Query to fetch turf details using prepared statements for security
+    $stmt = $conn->prepare("SELECT * FROM `turfs` WHERE `turf_id` = ?");
+    $stmt->bind_param("i", $turf_id);
     $stmt->execute();
-    $turfResult = $stmt->get_result();
+    $result = $stmt->get_result();
 
-    if ($turfResult->num_rows > 0) {
-        // Fetch the turf details
-        $turfDetails = $turfResult->fetch_assoc();
+    // Check if the query returned a result
+    if ($result->num_rows > 0) {
+        $turfDetails = $result->fetch_assoc(); // Fetch turf details as an associative array
+
+        // Fetch images associated with the turf
+        $image1 = $turfDetails['image'];
+        $image2 = $turfDetails['image_2'];
     } else {
-        // Redirect if the turf ID is invalid
-        header("Location: facility_available.php");
-        exit();
+        // Handle invalid TurfID by redirecting or showing an error
+        header("Location: facility_available.php"); // Redirect to facility_available.php for invalid TurfID
+        exit;
     }
-
-    
-
-    // Fetch images associated with the turf
-    $image1 = $turfDetails['image'];
-    $image2 = $turfDetails['image_2'];
-
 } else {
-    // If TurfID is not set, handle accordingly (e.g., redirect or show a message)
-    echo "TurfID parameter is missing.";
-    exit();
+    // Handle the case where TurfID is not provided or invalid
+    echo "TurfID parameter is missing or invalid.";
+    exit;
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,10 +46,10 @@ if (isset($_GET['TurfID'])) {
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 
-
+   
         <style>
             
             /* General Styles */
@@ -240,9 +228,9 @@ if (isset($_GET['TurfID'])) {
                 </div>
                 
                 <!-- Book Now Button -->
-                <div class="book-now-button mt-3">
-                        <button type="button" class="btn btn-success btn-lg" id="book_now">Book Now</button>
-                </div>
+                <center>
+                    <button class="btn btn-large btn-primary rounded-pill w-25" id="book_now" type="button">Book Now</button>
+                </center>
             </div>
 
             <!-- Details and Amenities Section -->
@@ -274,7 +262,7 @@ if (isset($_GET['TurfID'])) {
   $(function(){
     $('#book_now').click(function(){
         if("<?= $_settings->userdata('id') && $_settings->userdata('login_type') == 2 ?>" == 1)
-            uni_modal("Book Facility","booking.php?fid=<?= $TurfID ?>",'modal-sm');
+            uni_modal("Book Facility","booking.php?fid=<?= $turf_id ?>",'modal-sm');
         else
         location.href = './login.php';
     })
