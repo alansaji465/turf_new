@@ -4,8 +4,6 @@
 <?php require_once('inc/header.php') ?>
 <body>
 <?php $page = isset($_GET['p']) ? $_GET['p'] : 'home'; 
-
-echo $page;
 ?>
 
      <?php if($_settings->chk_flashdata('success')): ?>
@@ -13,6 +11,10 @@ echo $page;
         alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
       </script>
 <?php endif;?>
+
+
+<?php require_once('inc/topBarNav.php') ?>
+
 <?php 
     if(!file_exists($page.".php") && !is_dir($page)){
         include '404.html';

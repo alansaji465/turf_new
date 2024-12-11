@@ -1,22 +1,48 @@
 <?php
-require_once('./config.php'); // Ensure your config contains the DB connection
+require_once('./config.php'); // Include the database configuration file
 
+if (!empty($_GET)) {
+    echo "<pre>";
+    print_r($_GET);
+    echo "</pre>";
+} else {
+    echo "No GET parameters detected!";
+}
+
+
+if (isset($_GET['TurfID'])) {
+    echo "TurfID: " . $_GET['TurfID'] . "<br>";
+} else {
+    echo "TurfID is not set!";
+}
+
+
+// Check if the 'TurfID' parameter exists and is greater than 0
 if (isset($_GET['TurfID']) && $_GET['TurfID'] > 0) {
-    $turf_id = $_GET['TurfID'];
+    $turf_id = $_GET['TurfID']; // Assign TurfID from the URL to a variable
 
-    // Fetch turf booking details
-    $qry = $conn->query("SELECT * FROM `booking_list` WHERE `id` = '$turf_id'");
+    // Query the database for the record matching the given TurfID
+    $qry = $conn->query("SELECT * FROM `booking_list` WHERE `turf_id` = '$turf_id'");
+    
+    // Check if any record is found
     if ($qry->num_rows > 0) {
-        $booking = $qry->fetch_assoc(); // Fetch as associative array
+        // Dynamically create variables for each column
+        foreach ($qry->fetch_assoc() as $k => $v) {
+            $$k = $v; // Create a variable named after the column name
+        }
     } else {
-        echo "Invalid Turf ID!";
-        exit;
+        // Handle the case when no record is found
+        echo "No booking found for the provided Turf ID!";
     }
 } else {
-    echo "No Turf ID provided!";
+    // Handle the case when TurfID is missing or invalid
+    echo "Invalid or missing Turf ID!";
     exit;
 }
 ?>
+
+
+
 
 <div class="container-fluid">
     <form action="" id="booking-form">

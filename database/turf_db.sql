@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 01:07 PM
+-- Generation Time: Dec 09, 2024 at 06:28 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `amenities`
+--
+
+CREATE TABLE `amenities` (
+  `amenity_id` int(11) NOT NULL,
+  `amenity_name` varchar(255) NOT NULL,
+  `is_default` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `amenities`
+--
+
+INSERT INTO `amenities` (`amenity_id`, `amenity_name`, `is_default`) VALUES
+(1, 'Parking', 1),
+(2, 'Changing Rooms', 1),
+(3, 'First Aid', 1),
+(4, 'Drinking Water', 1),
+(5, 'Restrooms', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `booking_list`
 --
 
@@ -31,7 +54,7 @@ CREATE TABLE `booking_list` (
   `id` int(30) NOT NULL,
   `ref_code` varchar(100) NOT NULL,
   `client_id` int(30) NOT NULL,
-  `facility_id` int(30) NOT NULL,
+  `turf_id` int(11) NOT NULL,
   `date_from` date NOT NULL,
   `date_to` date NOT NULL,
   `status` tinyint(2) NOT NULL DEFAULT 0 COMMENT '0 = Pending,\r\n1 = Confirmed,\r\n2 = Done,\r\n3 = Cancelled',
@@ -43,14 +66,15 @@ CREATE TABLE `booking_list` (
 -- Dumping data for table `booking_list`
 --
 
-INSERT INTO `booking_list` (`id`, `ref_code`, `client_id`, `facility_id`, `date_from`, `date_to`, `status`, `date_created`, `date_updated`) VALUES
-(1, '202203-00001', 1, 1, '2022-03-24', '2022-03-24', 3, '2022-03-23 13:22:06', '2022-03-23 13:49:09'),
-(2, '202203-00002', 1, 2, '2022-03-24', '2022-03-25', 1, '2022-03-23 13:30:40', '2022-03-23 13:49:11'),
-(3, '202203-00003', 2, 4, '2022-03-24', '2022-03-25', 1, '2022-03-23 15:40:58', '2022-03-23 15:41:59'),
-(4, '202203-00004', 2, 1, '2022-03-28', '2022-03-28', 3, '2022-03-23 15:41:17', '2022-03-23 15:41:26'),
-(5, '202412-00001', 3, 1, '2024-12-04', '2024-12-05', 0, '2024-12-04 17:43:36', NULL),
-(6, '202412-00002', 37, 1, '2024-12-16', '2024-12-08', 0, '2024-12-07 00:36:24', NULL),
-(7, '202412-00003', 3, 1, '2024-12-09', '2024-12-10', 0, '2024-12-08 15:12:06', NULL);
+INSERT INTO `booking_list` (`id`, `ref_code`, `client_id`, `turf_id`, `date_from`, `date_to`, `status`, `date_created`, `date_updated`) VALUES
+(1, '202203-00001', 1, 7, '2022-03-24', '2022-03-24', 3, '2022-03-23 13:22:06', '2024-12-09 10:54:38'),
+(2, '202203-00002', 1, 7, '2022-03-24', '2022-03-25', 1, '2022-03-23 13:30:40', '2024-12-09 10:54:38'),
+(3, '202203-00003', 2, 7, '2022-03-24', '2022-03-25', 1, '2022-03-23 15:40:58', '2024-12-09 10:54:38'),
+(4, '202203-00004', 2, 7, '2022-03-28', '2022-03-28', 3, '2022-03-23 15:41:17', '2024-12-09 10:54:38'),
+(5, '202412-00001', 3, 7, '2024-12-04', '2024-12-05', 0, '2024-12-04 17:43:36', '2024-12-09 10:54:38'),
+(6, '202412-00002', 37, 7, '2024-12-16', '2024-12-08', 0, '2024-12-07 00:36:24', '2024-12-09 10:54:38'),
+(7, '202412-00003', 3, 7, '2024-12-09', '2024-12-10', 0, '2024-12-08 15:12:06', '2024-12-09 10:54:38'),
+(9, '', 1, 10, '2024-12-10', '2024-12-12', 0, '2024-12-09 10:47:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -197,13 +221,25 @@ INSERT INTO `turfs` (`turf_id`, `turf_name`, `description`, `location`, `image`,
 (2, 'Sporthood Turfpark', 'Sporthood Turfpark can simultaneously host 7-a-side and 5-a-side games. It is close to the biggest shopping mall in Kerala and has great access from the city’s arterial roads.', 'Edappally, Kochi', 'assets\\images\\turf-images\\sporthood-turfpark-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\sporthood-turfpark-1.jpeg'),
 (3, 'Gamma Football', 'Gamma Football has a FIFA-approved 3G artificial turf that’s designed to soften impact on the joints and decrease the likelihood of injury. They have a women\'s football programme called Gamma Girls.', 'Chilavannoor, Ernakulam', 'assets\\images\\turf-images\\gamma-football-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\gamma-football-1.jpeg'),
 (4, 'Parkway', 'Located in the heart of Kochi, Parkway is a multi-sport centre and a popular gathering place for sports enthusiasts in the city.', 'Kalamassery, Kochi', 'assets\\images\\turf-images\\parkway-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\parkway-1.jpeg'),
-(5, 'MTM Sports', 'Located at the heart of Ponnani, a place of historical importance, MTM Sports Village is Malabar’s first multi-sport arena. It was designed to be a community centre and has a wide range of sports: football, cricket, tennis, swimming, roller skating, basketball, badminton, volleyball, table tennis and beach volleyball.', 'Ponnani, Malappuram', 'assets\\images\\turf-images\\MTM-sports-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\MTM-sports-1.jpeg'),
+(5, 'MTM Sports', 'Located at the heart of Ponnani, a place of historical importance, MTM Sports Village is Malabar’s first multi-sport arena. It was designed to be a community centre and has a wide range of sports.', 'Ponnani, Malappuram', 'assets\\images\\turf-images\\MTM-sports-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\MTM-sports-1.jpeg'),
 (6, 'Lake Zone', 'Lake Zone is a very good facility in Kolathara. The 5-a-side football turf is by the river. The place is well-known for water sports and boat rides.', 'Kolathara, Kozhikode', 'assets\\images\\turf-images\\Lake-Zone-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Lake-Zone-1.jpeg'),
 (7, 'Just Futsal', 'Just Futsal is a stunning turf overlooking Thrissur City. It is equipped with a state-of-the-art FIFA-standard synthetic turf and excellent lighting.', 'Shobha City Mall, Thrissur', 'assets\\images\\turf-images\\Just-Futsal-2.jpg', 1500.00, 'available', 'assets\\images\\turf-images\\Just-Futsal-1.jpeg'),
-(8, 'Goal Castle', 'Vazhakkad and its neighbouring areas have produced many state and national players -- U Sharafali (former Indian player), Ijaz Ali (Indian Junior Team), Hanan Javed (Indian Junior Team), Shakkeer Manuppa (former Kerala Blasters), Shabaz Saleel (India U-21). Goal Castle is one of the first artificial turfs in Malabar region. Good for 5-a-side matches.', 'Vazhakkad, Kozhikode', 'assets\\images\\turf-images\\Goal-Castle-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Goal-Castle-1.jpg'),
+(8, 'Goal Castle', 'Vazhakkad and its neighbouring areas have produced many state and national players.Good for 5-a-side matches.', 'Vazhakkad, Kozhikode', 'assets\\images\\turf-images\\Goal-Castle-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Goal-Castle-1.jpg'),
 (9, 'Sporthood Espirito', 'Sporthood Espirito was the first turf in Kakkanad area. It is easily accessible from Infopark, an IT park complex in Kochi.', 'Kakkanad, Kochi', 'assets\\images\\turf-images\\Sporthood-Espirito-2.jpg', 800.00, 'available', 'assets\\images\\turf-images\\Sporthood-Espirito-1.jpeg'),
 (10, 'Cochin Sports Arena', 'Cochin Sports Arena is the biggest 7-a-side ground in the locality and easily accessible from main areas like Kakkanad, Palarivattom and Edapally', 'Edappally, Kochi', 'assets\\images\\turf-images\\Cochin-Sports-Arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Cochin-Sports-Arena-1.jpeg'),
 (11, 'Calicut Arena', 'Calicut Arena is one of the best and biggest turfs in the city of Calicut. The arena has two independent courts; one for 7-a-side and one for 5-a-side.', 'Moozhikkal, Kozhikode', 'assets\\images\\turf-images\\Calicut-Arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Calicut-Arena-1.jpeg');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `turf_amenities`
+--
+
+CREATE TABLE `turf_amenities` (
+  `id` int(11) NOT NULL,
+  `turf_id` int(11) NOT NULL,
+  `amenity_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -237,12 +273,18 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `ava
 --
 
 --
+-- Indexes for table `amenities`
+--
+ALTER TABLE `amenities`
+  ADD PRIMARY KEY (`amenity_id`);
+
+--
 -- Indexes for table `booking_list`
 --
 ALTER TABLE `booking_list`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `cab_id` (`facility_id`),
-  ADD KEY `client_id` (`client_id`);
+  ADD KEY `client_id` (`client_id`),
+  ADD KEY `fk_booking_turf` (`turf_id`);
 
 --
 -- Indexes for table `category_list`
@@ -277,6 +319,14 @@ ALTER TABLE `turfs`
   ADD PRIMARY KEY (`turf_id`);
 
 --
+-- Indexes for table `turf_amenities`
+--
+ALTER TABLE `turf_amenities`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `turf_id` (`turf_id`),
+  ADD KEY `amenity_id` (`amenity_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -287,10 +337,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `amenities`
+--
+ALTER TABLE `amenities`
+  MODIFY `amenity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `booking_list`
 --
 ALTER TABLE `booking_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `category_list`
@@ -323,6 +379,12 @@ ALTER TABLE `turfs`
   MODIFY `turf_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT for table `turf_amenities`
+--
+ALTER TABLE `turf_amenities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -336,14 +398,20 @@ ALTER TABLE `users`
 -- Constraints for table `booking_list`
 --
 ALTER TABLE `booking_list`
-  ADD CONSTRAINT `booking_list_ibfk_1` FOREIGN KEY (`facility_id`) REFERENCES `facility_list` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `booking_list_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `client_list` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_booking_turf` FOREIGN KEY (`turf_id`) REFERENCES `turfs` (`turf_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `facility_list`
 --
 ALTER TABLE `facility_list`
   ADD CONSTRAINT `facility_list_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category_list` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `turf_amenities`
+--
+ALTER TABLE `turf_amenities`
+  ADD CONSTRAINT `turf_amenities_ibfk_1` FOREIGN KEY (`turf_id`) REFERENCES `turfs` (`turf_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `turf_amenities_ibfk_2` FOREIGN KEY (`amenity_id`) REFERENCES `amenities` (`amenity_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

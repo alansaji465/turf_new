@@ -60,158 +60,14 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo htmlspecialchars($turfDetails['turf_name']); ?> Turf Details</title>
+        <link rel="stylesheet" href="assets/css/view_facility.css">
         <link rel="stylesheet" href="assets/css/common.css?v=1">
         <link rel="stylesheet" href="assets/css/styles.css?v=4">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 
-   
-        <style>
-            
-            /* General Styles */
-            body {
-                margin: 0;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-                font-size: 1rem;
-                font-weight: 400;
-                line-height: 1.5;
-                color: #212529;
-                text-align: left;
-                background-color: #fff;
-            }
-
-            .book-now-button {   
-                text-align: center;
-                margin-top: 55px;
-            }
-
-            .carousel {
-                margin-bottom: 20px; /* Adds spacing between the carousel and button */
-            }
-
-            @media (max-width: 768px) {
-                .book-now-button {
-                    text-align: center; /* Center the button for smaller screens */
-                }
-            }
-
-
-            /* Turf Info Section */
-            .turf-info {
-                padding: 40px 0;
-                background-color: #fff;
-                border-bottom: 2px solid #ddd;
-            }
-
-            .turf-info .carousel-inner img {
-                width: 100%;
-                height: 450px;
-                object-fit: cover;
-                border-radius: 8px;
-            }
-
-            .info-cards .card {
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                padding: 20px;
-                margin-top: 20px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease;
-            }
-
-            .info-cards .card:hover {
-                transform: translateY(-10px);
-            }
-
-            .info-cards .card-title {
-                font-weight: 700;
-                font-size: 1.3rem;
-                color: #2c3e50;
-            }
-
-            .info-cards .card-text {
-                font-size: 1.1rem;
-                margin-top: 12px;
-                color: #555;
-            }
-
-            /* Booking Form Section */
-            .booking-form {
-                padding: 50px 20px;
-                background-color: #fff;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-                border-radius: 12px;
-                margin-top: 40px;
-            }
-
-            .booking-form .section-title {
-                font-size: 2rem;
-                font-weight: 600;
-                margin-bottom: 30px;
-                text-align: center;
-                color: #2c3e50;
-            }
-
-            .booking-form .form-group label {
-                font-weight: 600;
-                color: #2c3e50;
-            }
-
-            .booking-form .form-control {
-                font-size: 1.1rem;
-                padding: 12px;
-                margin-top: 12px;
-                border-radius: 8px;
-                border: 1px solid #ddd;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            .booking-form .btn {
-                background-color: #117215;
-                border: none;
-                font-size: 1.3rem;
-                padding: 18px 35px;
-                color: white;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-            .booking-form .btn:hover {
-                background-color: #06560a;
-            }
-
-            /* Responsive Adjustments */
-            @media (max-width: 768px) {
-                .time-slot-grid {
-                    grid-template-columns: repeat(2, 1fr);  /* For smaller screens, 2 columns */
-                }
-
-                .hero-title {
-                    font-size: 2.5rem;
-                }
-
-                .hero-location {
-                    font-size: 1rem;
-                }
-            }
-
-            /* Miscellaneous */
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 15px;
-            }
-
-        </style>     
     </head>
-    <body>
+    <body style="height: auto;margin-top: 100px;">
 
         <!-- Hero Section -->
         <section class="hero-section" style="background-image: url('<?php echo $image1; ?>');">
@@ -250,7 +106,7 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
                 
                 <!-- Book Now Button -->
                 <center>
-                    <button class="btn btn-large btn-primary rounded-pill w-25" id="book_now" type="button">Book Now</button>
+                    <button type="submit" class="btn btn-success btn-lg" id="book_now" type="button">Book Now</button>
                 </center>
             </div>
 
@@ -291,31 +147,13 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
 
 <script>
     
-    $(function() {
-    $('#book_now').click(function() {
-        if("<?= $_settings->userdata('id') && $_settings->userdata('login_type') == 2 ?>" == 1) {
-            // Open the booking modal
-            uni_modal("Book Facility", "booking.php?fid=<?= $turf_id ?>", 'modal-sm');
-        } else {
-            // Redirect to login page
-            location.href = './login.php';
-        }
-    });
-
-    // Date change event to fetch available slots for the selected date
-    $('#booking_date').change(function() {
-        var selectedDate = $(this).val();
-        $.ajax({
-            url: 'fetch_slots.php', // PHP file that fetches available slots for the selected date
-            type: 'POST',
-            data: { turf_id: <?= $turf_id ?>, date: selectedDate },
-            success: function(response) {
-                // Update the available slots dropdown based on the response
-                $('#time_slots').html(response);
-            }
-        });
-    });
-});
-
+    $(function(){
+    $('#book_now').click(function(){
+        if("<?= $_settings->userdata('id') && $_settings->userdata('login_type') == 2 ?>" == 1)
+            uni_modal("Book Facility","booking.php?fid=<?= $turf_id ?>",'modal-sm');
+        else
+        location.href = './login.php';
+    })
+  })
 
 </script>
