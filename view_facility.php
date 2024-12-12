@@ -150,7 +150,7 @@ if (isset($_GET['TurfID']) && intval($_GET['TurfID']) > 0) {
     $(function(){
     $('#book_now').click(function(){
         if("<?= $_settings->userdata('id') && $_settings->userdata('login_type') == 2 ?>" == 1)
-            uni_modal("Book Facility","booking.php?fid=<?= $turf_id ?>",'modal-sm');
+            uni_modal("Book Facility","booking.php?TurfID=<?= $turf_id ?>",'modal-sm');
         else
         location.href = './login.php';
     })
