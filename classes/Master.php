@@ -1,8 +1,9 @@
 <?php
 require_once('../config.php');
-Class Master extends DBConnection {
+
+class Master extends DBConnection {
     private $settings;
-    
+
     public function __construct(){
         global $_settings;
         $this->settings = $_settings;
@@ -81,7 +82,7 @@ Class Master extends DBConnection {
                 $resp['msg'] = " New facility (turf) successfully saved.";
             else
                 $resp['msg'] = " Facility (turf) successfully updated.";
-            
+
             // Handle image upload
             if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
                 if(!is_dir(base_app."uploads/facility/"))
@@ -217,6 +218,17 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
+
+    public function toggle_status(){
+        $id = $_POST['id'];
+        $new_status = $_POST['status'];
+        $update = $this->conn->query("UPDATE `turfs` SET `status` = '{$new_status}' WHERE `turf_id` = '{$id}'");
+        if($update){
+            return ['status' => 'success'];
+        } else {
+            return ['status' => 'failed', 'error' => $this->conn->error];
+        }
+    }
 }
 
 $Master = new Master();
@@ -238,6 +250,9 @@ switch ($action) {
         break;
     case 'update_booking_status':
         echo $Master->update_booking_status();
+        break;
+    case 'toggle_status':
+        echo json_encode($Master->toggle_status());
         break;
     default:
         break;

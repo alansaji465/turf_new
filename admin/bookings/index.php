@@ -9,17 +9,17 @@
                     <col width="5%">
                     <col width="15%">
                     <col width="15%">
-                    <col width="15%">
+                    <col width="20%">
                     <col width="20%">
                     <col width="15%">
-                    <col width="15%">
+                    <col width="10%">
                 </colgroup>
                 <thead>
                     <tr class="bg-gradient-dark text-light">
                         <th class="text-center">#</th>
                         <th class="text-center">Date Booked</th>
                         <th class="text-center">Ref. Code</th>
-                        <th class="text-center">Facility</th>
+                        <th class="text-center">Turf</th>
                         <th class="text-center">Client</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Action</th>
@@ -28,21 +28,29 @@
                 <tbody>
                     <?php 
                     $i = 1;
-                    $bookings = $conn->query("SELECT b.*,concat(c.lastname,', ', c.firstname,' ',COALESCE(c.middlename,'')) as client, f.name as facility,cc.name as category FROM `booking_list` b inner join client_list c on b.client_id = c.id inner join facility_list f on b.facility_id = f.id inner join category_list cc on f.category_id = cc.id order by unix_timestamp(b.date_created) desc ");
-                    while($row = $bookings->fetch_assoc()):
+                    $bookings = $conn->query("
+                        SELECT 
+                            b.*, 
+                            CONCAT(c.lastname, ', ', c.firstname, ' ', COALESCE(c.middlename, '')) AS client, 
+                            t.turf_name AS turf 
+                        FROM `booking_list` b 
+                        INNER JOIN `client_list` c ON b.client_id = c.id 
+                        INNER JOIN `turfs` t ON b.turf_id = t.turf_id 
+                        ORDER BY UNIX_TIMESTAMP(b.date_created) DESC
+                    ");
+                    while ($row = $bookings->fetch_assoc()):
                     ?>
                         <tr>
                             <td class="text-center"><?= $i++ ?></td>
                             <td><?= date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
                             <td><?= $row['ref_code'] ?></td>
-                            <td><?= $row['client'] ?></td>
                             <td>
-                                <p class="truncate-1 m-0"><?= $row['facility'] ?></p>
-                                <small class="text-muted"><?= $row['category'] ?></small>
+                                <p class="truncate-1 m-0"><?= $row['turf'] ?></p>
                             </td>
+                            <td><?= $row['client'] ?></td>
                             <td class="text-center">
                                 <?php 
-                                    switch($row['status']){
+                                    switch ($row['status']) {
                                         case 0:
                                             echo "<span class='badge badge-secondary bg-gradient-secondary px-3 rounded-pill'>Pending</span>";
                                             break;
@@ -58,9 +66,10 @@
                                     }
                                 ?>
                             </td>
-                            </td>
                             <td class="text-center">
-                                <a class="btn btn-flat btn-sm btn-default border view_data" href="javascript:void(0)" data-id="<?= $row['id'] ?>"><i class="fa fa-eye"></i> View</a>
+                                <a class="btn btn-flat btn-sm btn-default border view_data" href="javascript:void(0)" data-id="<?= $row['id'] ?>">
+                                    <i class="fa fa-eye"></i> View
+                                </a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -70,13 +79,11 @@
     </div>
 </div>
 <script>
-    $(function(){
-
-        $('.table th, .table td').addClass("align-middle px-2 py-1")
-		$('.table').dataTable();
-		$('.table').dataTable();
-        $('.view_data').click(function(){
-            uni_modal("Booking Details","bookings/view_booking.php?id="+$(this).attr('data-id'))
-        })
-    })
+    $(function() {
+        $('.table th, .table td').addClass("align-middle px-2 py-1");
+        $('.table').dataTable();
+        $('.view_data').click(function() {
+            uni_modal("Booking Details", "bookings/view_booking.php?id=" + $(this).attr('data-id'));
+        });
+    });
 </script>

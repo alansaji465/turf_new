@@ -1,36 +1,32 @@
 <?php
 require_once('./config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `booking_list` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * FROM `booking_list` WHERE id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
+            $$k = $v;
         }
-        $qry2 = $conn->query("SELECT f.*, c.name as category from `facility_list` f inner join category_list c on f.category_id = c.id where f.id = '{$facility_id}' ");
+        $qry2 = $conn->query("SELECT t.* FROM `turfs` t WHERE t.turf_id = '{$turf_id}' ");
         if($qry2->num_rows > 0){
             foreach($qry2->fetch_assoc() as $k => $v){
                 if(!isset($$k))
-                $$k=$v;
+                $$k = $v;
             }
         }
     }
 }
 ?>
 <style>
-    #uni_modal .modal-footer{
-        display:none
+    #uni_modal .modal-footer {
+        display: none;
     }
 </style>
 <div class="container-fluid">
     <fieldset class="border-bottom">
-        <legend class="h5 text-muted"> Facility Details</legend>
+        <legend class="h5 text-muted"> Turf Details</legend>
         <dl>
-            <dt class="">Facility Code</dt>
-            <dd class="pl-4"><?= isset($facility_code) ? $facility_code : "" ?></dd>
-            <dt class="">Name</dt>
-            <dd class="pl-4"><?= isset($name) ? $name : "" ?></dd>
-            <dt class="">Category</dt>
-            <dd class="pl-4"><?= isset($category) ? $category : "" ?></dd>
+            <dt class="">Turf Name</dt>
+            <dd class="pl-4"><?= isset($turf_name) ? $turf_name : "" ?></dd>
         </dl>
     </fieldset>
     <div class="clear-fix my-2"></div>
@@ -44,8 +40,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
              <?php 
                     if($date_from == $date_to){
                         echo date("M d, Y", strtotime($date_from));
-                    }else{
-                        echo date("M d, Y", strtotime($date_from))." - ".date("M d, Y", strtotime($date_to));
+                    } else {
+                        echo date("M d, Y", strtotime($date_from)) . " - " . date("M d, Y", strtotime($date_to));
                     }
                 ?>
             </dd>
@@ -73,7 +69,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     <div class="clear-fix my-3"></div>
     <div class="text-right">
         <?php if(isset($status) && $status == 0): ?>
-        <button class="btn btn-danger btn-flat bg-gradient-danger" type="button" id="cancel_booking">Cancel Book</button>
+        <button class="btn btn-danger btn-flat bg-gradient-danger" type="button" id="cancel_booking">Cancel Booking</button>
         <?php endif; ?>
         <button class="btn btn-dark btn-flat bg-gradient-dark" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
     </div>
@@ -81,29 +77,29 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <script>
     $(function(){
         $('#cancel_booking').click(function(){
-            _conf("Are you sure to cancel your facility booking [Ref. Code: <b><?= isset($ref_code) ? $ref_code : "" ?></b>]?", "cancel_booking",["<?= isset($id) ? $id : "" ?>"])
-        })
-    })
+            _conf("Are you sure to cancel your turf booking [Ref. Code: <b><?= isset($ref_code) ? $ref_code : "" ?></b>]?", "cancel_booking", ["<?= isset($id) ? $id : "" ?>"]);
+        });
+    });
     function cancel_booking($id){
         start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=update_booking_status",
-			method:"POST",
-			data:{id: $id,status:3},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert_toast("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.reload();
-				}else{
-					alert_toast("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
+        $.ajax({
+            url: _base_url_ + "classes/Master.php?f=update_booking_status",
+            method: "POST",
+            data: {id: $id, status: 3},
+            dataType: "json",
+            error: err => {
+                console.log(err);
+                alert_toast("An error occurred.", 'error');
+                end_loader();
+            },
+            success: function(resp){
+                if (typeof resp == 'object' && resp.status == 'success') {
+                    location.reload();
+                } else {
+                    alert_toast("An error occurred.", 'error');
+                    end_loader();
+                }
+            }
+        });
     }
 </script>

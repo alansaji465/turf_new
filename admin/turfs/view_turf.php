@@ -1,15 +1,18 @@
 <?php
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT f.*, c.name as category from `facility_list` f inner join category_list c on f.category_id = c.id where f.id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * FROM `turfs` WHERE `turf_id` = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=stripslashes($v);
         }
     }
 }
+
+var_dump($image);
+
 ?>
 <style>
-    .facility-img{
+    .turf-img{
         width:100%;
         object-fit:scale-down;
         object-position:center center;
@@ -18,25 +21,28 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 <div class="content py-3">
     <div class="card card-outline rounded-0 card-primary shadow">
         <div class="card-header">
-            <h4 class="card-title">Facility Details</h4>
+            <h4 class="card-title">Turf Details</h4>
             <div class="card-tools">
-                <a class="btn btn-primary btn-sm btn-flat" href="./?page=facilities/manage_facility&id=<?= isset($id) ? $id : "" ?>"><i class="fa fa-edit"></i> Edit</a>
-                <a class="btn btn-danger btn-sm btn-flat" href="javascript:void(0)>" id="delete_data"><i class="fa fa-trash"></i> Delete</a>
-                <a class="btn btn-default border btn-sm btn-flat" href="./?page=facilities"><i class="fa fa-angle-left"></i> Back</a>
+                <a class="btn btn-primary btn-sm btn-flat" href="./?page=turfs/manage_turfs&id=<?= isset($turf_id) ? $turf_id : "" ?>"><i class="fa fa-edit"></i> Edit</a>
+                <a class="btn btn-danger btn-sm btn-flat" href="javascript:void(0)" id="delete_data"><i class="fa fa-trash"></i> Delete</a>
+                <a class="btn btn-default border btn-sm btn-flat" href="./?page=turfs"><i class="fa fa-angle-left"></i> Back</a>
             </div>
         </div>
         <div class="card-body">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-12 text-center">
-                        <img src="<?= validate_image(isset($image_path) ? $image_path : "") ?>" alt="facility Image <?= isset($name) ? $name : "" ?>" class="img-thumbnail facility-img">
+                    <img src="<?= 'assets/images/turf-images/' . basename($image) ?>" 
+     alt="Turf Image <?= isset($turf_name) ? htmlspecialchars($turf_name) : '' ?>" 
+     class="img-thumbnail turf-img">
+
+
                     </div>
                 </div>
                 <fieldset>
                     <div class="row">
                         <div class="col-md-12">
                             <small class="mx-2 text-muted">Name</small>
-                            <div class="pl-4"><?= isset($name) ? $name : '' ?></div>
+                            <div class="pl-4"><?= isset($turf_name) ? $turf_name : '' ?></div>
                         </div>
                         <div class="col-md-12">
                             <small class="mx-2 text-muted">Description</small>
@@ -52,10 +58,16 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </fieldset>
                 <div class="row">
                     <div class="col-md-12">
+                        <small class="mx-2 text-muted">Location</small>
+                        <div class="pl-4"><?= isset($location) ? $location : '' ?></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <small class="mx-2 text-muted">Status</small>
                         <div class="pl-4">
                             <?php if(isset($status)): ?>
-                                <?php if($status == 1): ?>
+                                <?php if($status == 'Available'): ?>
                                     <span class="badge badge-success px-3 rounded-pill">Active</span>
                                 <?php else: ?>
                                     <span class="badge badge-danger px-3 rounded-pill">Inactive</span>
@@ -70,30 +82,31 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </div>
 <script>
     $(document).ready(function(){
-		$('#delete_data').click(function(){
-			_conf("Are you sure to delete this facility permanently?","delete_facility",[])
-		})
+        $('#delete_data').click(function(){
+            _conf("Are you sure to delete this turf permanently?","delete_turf",[])
+        })
     })
-    function delete_facility($id = '<?= isset($id) ? $id : "" ?>'){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_facility",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert_toast("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.href= './?page=facilities';
-				}else{
-					alert_toast("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
-	}
+    
+    function delete_turf($id = '<?= isset($turf_id) ? $turf_id : "" ?>'){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=delete_turf",
+            method:"POST",
+            data:{id: $id},
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert_toast("An error occurred.",'error');
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp == 'object' && resp.status == 'success'){
+                    location.href= './?page=turfs';
+                } else {
+                    alert_toast("An error occurred.",'error');
+                    end_loader();
+                }
+            }
+        })
+    }
 </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2024 at 01:35 PM
+-- Generation Time: Dec 16, 2024 at 04:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -71,10 +71,17 @@ INSERT INTO `booking_list` (`id`, `ref_code`, `client_id`, `turf_id`, `date_from
 (2, '202203-00002', 1, 7, '2022-03-24', '2022-03-25', 1, '2022-03-23 13:30:40', '2024-12-09 10:54:38'),
 (3, '202203-00003', 2, 7, '2022-03-24', '2022-03-25', 1, '2022-03-23 15:40:58', '2024-12-09 10:54:38'),
 (4, '202203-00004', 2, 7, '2022-03-28', '2022-03-28', 3, '2022-03-23 15:41:17', '2024-12-09 10:54:38'),
-(5, '202412-00001', 3, 7, '2024-12-04', '2024-12-05', 0, '2024-12-04 17:43:36', '2024-12-09 10:54:38'),
-(6, '202412-00002', 37, 7, '2024-12-16', '2024-12-08', 0, '2024-12-07 00:36:24', '2024-12-09 10:54:38'),
+(5, '202412-00001', 3, 7, '2024-12-04', '2024-12-05', 3, '2024-12-04 17:43:36', '2024-12-12 13:14:59'),
+(6, '202412-00002', 37, 7, '2024-12-16', '2024-12-08', 3, '2024-12-07 00:36:24', '2024-12-12 13:14:46'),
 (7, '202412-00003', 3, 7, '2024-12-09', '2024-12-10', 0, '2024-12-08 15:12:06', '2024-12-09 10:54:38'),
-(9, '', 1, 10, '2024-12-10', '2024-12-12', 0, '2024-12-09 10:47:08', NULL);
+(9, '', 1, 10, '2024-12-10', '2024-12-12', 0, '2024-12-09 10:47:08', NULL),
+(10, '202412-00004', 37, 1, '2024-12-18', '2024-12-19', 0, '2024-12-12 13:11:32', '2024-12-16 08:55:19'),
+(11, '202412-00005', 3, 9, '2024-12-17', '2024-12-18', 1, '2024-12-12 15:02:22', '2024-12-15 17:20:13'),
+(12, '202412-00006', 3, 3, '2024-12-16', '2024-12-17', 0, '2024-12-14 14:07:43', NULL),
+(13, '202412-00007', 3, 2, '2024-12-19', '2024-12-20', 0, '2024-12-14 14:08:24', '2024-12-14 18:20:59'),
+(14, '202412-00008', 37, 4, '2024-12-16', '2024-12-17', 0, '2024-12-14 17:57:34', '2024-12-14 17:58:40'),
+(15, '202412-00009', 37, 6, '2024-12-15', '2024-12-16', 0, '2024-12-14 17:59:19', NULL),
+(16, '202412-00010', 37, 5, '2024-12-15', '2024-12-16', 0, '2024-12-14 17:59:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -134,12 +141,7 @@ CREATE TABLE `client_list` (
 --
 
 INSERT INTO `client_list` (`id`, `firstname`, `middlename`, `lastname`, `gender`, `contact`, `address`, `email`, `password`, `image_path`, `status`, `delete_flag`, `date_created`, `date_added`) VALUES
-(1, 'Mark', 'D', 'Male', '', '09123456789', 'Sample Address', 'mcooper@sample.com', 'c7162ff89c647f444fcaa5c635dac8c3', 'uploads/clients/1.png?v=1648008107', 1, 0, '2022-03-23 12:01:47', '2022-03-23 12:01:47'),
-(2, 'Samantha', 'C', 'Miller', 'Male', '09456789123', 'Sample Address only', 'sam23@gmail.com', '56fafa8964024efa410773781a5f9e93', 'uploads/clients/2.png?v=1648021231', 1, 0, '2022-03-23 15:40:31', '2022-03-23 15:44:07'),
-(3, 'amal', '', 'saji', 'Male', '6282330119', 'Ned', 'amal@gmail.com', '16b5480e7b6e68607fe48815d16b5d6d', NULL, 1, 0, '2024-12-04 17:42:30', NULL),
-(31, 'a', NULL, NULL, NULL, NULL, NULL, 'alansaji142@gmail.com', '0cc175b9c0f1b6a831c399e269772661', NULL, 1, 0, '2024-12-07 00:02:16', NULL),
-(33, 'amal', NULL, NULL, NULL, NULL, NULL, 'healthytouch77@gmail.com', '0cc175b9c0f1b6a831c399e269772661', NULL, 1, 0, '2024-12-07 00:11:00', NULL),
-(37, 'A', NULL, NULL, NULL, NULL, NULL, 'qwe@gmail.com', '7fc56270e7a70fa81a5935b72eacbe29', NULL, 1, 0, '2024-12-07 00:32:15', NULL);
+(3, 'amal', '', 'saji', 'Male', '6282330119', 'Ned', 'amal@gmail.com', '16b5480e7b6e68607fe48815d16b5d6d', NULL, 1, 0, '2024-12-04 17:42:30', NULL);
 
 -- --------------------------------------------------------
 
@@ -208,7 +210,7 @@ CREATE TABLE `turfs` (
   `location` varchar(150) NOT NULL,
   `image` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `status` enum('available','booked') NOT NULL DEFAULT 'available',
+  `status` enum('Available','Unavailable') NOT NULL,
   `image_2` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -217,17 +219,17 @@ CREATE TABLE `turfs` (
 --
 
 INSERT INTO `turfs` (`turf_id`, `turf_name`, `description`, `location`, `image`, `price`, `status`, `image_2`) VALUES
-(1, 'Sparta Arena', 'Sparta Arena hosts a lot of semi-professional games. It also has cricket and beach volleyball facilities in the complex.', 'Oruvathilkotta, Thiruvananthapuram', 'assets\\images\\turf-images\\sparta-arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\sparta-arena-1.jpeg'),
-(2, 'Sporthood Turfpark', 'Sporthood Turfpark can simultaneously host 7-a-side and 5-a-side games. It is close to the biggest shopping mall in Kerala and has great access from the city’s arterial roads.', 'Edappally, Kochi', 'assets\\images\\turf-images\\sporthood-turfpark-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\sporthood-turfpark-1.jpeg'),
-(3, 'Gamma Football', 'Gamma Football has a FIFA-approved 3G artificial turf that’s designed to soften impact on the joints and decrease the likelihood of injury. They have a women\'s football programme called Gamma Girls.', 'Chilavannoor, Ernakulam', 'assets\\images\\turf-images\\gamma-football-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\gamma-football-1.jpeg'),
-(4, 'Parkway', 'Located in the heart of Kochi, Parkway is a multi-sport centre and a popular gathering place for sports enthusiasts in the city.', 'Kalamassery, Kochi', 'assets\\images\\turf-images\\parkway-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\parkway-1.jpeg'),
-(5, 'MTM Sports', 'Located at the heart of Ponnani, a place of historical importance, MTM Sports Village is Malabar’s first multi-sport arena. It was designed to be a community centre and has a wide range of sports.', 'Ponnani, Malappuram', 'assets\\images\\turf-images\\MTM-sports-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\MTM-sports-1.jpeg'),
-(6, 'Lake Zone', 'Lake Zone is a very good facility in Kolathara. The 5-a-side football turf is by the river. The place is well-known for water sports and boat rides.', 'Kolathara, Kozhikode', 'assets\\images\\turf-images\\Lake-Zone-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Lake-Zone-1.jpeg'),
-(7, 'Just Futsal', 'Just Futsal is a stunning turf overlooking Thrissur City. It is equipped with a state-of-the-art FIFA-standard synthetic turf and excellent lighting.', 'Shobha City Mall, Thrissur', 'assets\\images\\turf-images\\Just-Futsal-2.jpg', 1500.00, 'available', 'assets\\images\\turf-images\\Just-Futsal-1.jpeg'),
-(8, 'Goal Castle', 'Vazhakkad and its neighbouring areas have produced many state and national players.Good for 5-a-side matches.', 'Vazhakkad, Kozhikode', 'assets\\images\\turf-images\\Goal-Castle-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Goal-Castle-1.jpg'),
-(9, 'Sporthood Espirito', 'Sporthood Espirito was the first turf in Kakkanad area. It is easily accessible from Infopark, an IT park complex in Kochi.', 'Kakkanad, Kochi', 'assets\\images\\turf-images\\Sporthood-Espirito-2.jpg', 800.00, 'available', 'assets\\images\\turf-images\\Sporthood-Espirito-1.jpeg'),
-(10, 'Cochin Sports Arena', 'Cochin Sports Arena is the biggest 7-a-side ground in the locality and easily accessible from main areas like Kakkanad, Palarivattom and Edapally', 'Edappally, Kochi', 'assets\\images\\turf-images\\Cochin-Sports-Arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Cochin-Sports-Arena-1.jpeg'),
-(11, 'Calicut Arena', 'Calicut Arena is one of the best and biggest turfs in the city of Calicut. The arena has two independent courts; one for 7-a-side and one for 5-a-side.', 'Moozhikkal, Kozhikode', 'assets\\images\\turf-images\\Calicut-Arena-2.jpg', 1000.00, 'available', 'assets\\images\\turf-images\\Calicut-Arena-1.jpeg');
+(1, 'Sparta Arena', 'Sparta Arena hosts a lot of semi-professional games. It also has cricket and beach volleyball facilities in the complex.', 'Oruvathilkotta, Thiruvananthapuram', 'assets\\images\\turf-images\\sparta-arena-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\sparta-arena-1.jpeg'),
+(2, 'Sporthood Turfpark', 'Sporthood Turfpark can simultaneously host 7-a-side and 5-a-side games. It is close to the biggest shopping mall in Kerala and has great access from the city’s arterial roads.', 'Edappally, Kochi', 'assets\\images\\turf-images\\sporthood-turfpark-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\sporthood-turfpark-1.jpeg'),
+(3, 'Gamma Football', 'Gamma Football has a FIFA-approved 3G artificial turf that’s designed to soften impact on the joints and decrease the likelihood of injury. They have a women\'s football programme called Gamma Girls.', 'Chilavannoor, Ernakulam', 'assets\\images\\turf-images\\gamma-football-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\gamma-football-1.jpeg'),
+(4, 'Parkway', 'Located in the heart of Kochi, Parkway is a multi-sport centre and a popular gathering place for sports enthusiasts in the city.', 'Kalamassery, Kochi', 'assets\\images\\turf-images\\parkway-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\parkway-1.jpeg'),
+(5, 'MTM Sports', 'Located at the heart of Ponnani, a place of historical importance, MTM Sports Village is Malabar’s first multi-sport arena. It was designed to be a community centre and has a wide range of sports.', 'Ponnani, Malappuram', 'assets\\images\\turf-images\\MTM-sports-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\MTM-sports-1.jpeg'),
+(6, 'Lake Zone', 'Lake Zone is a very good facility in Kolathara. The 5-a-side football turf is by the river. The place is well-known for water sports and boat rides.', 'Kolathara, Kozhikode', 'assets\\images\\turf-images\\Lake-Zone-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\Lake-Zone-1.jpeg'),
+(7, 'Just Futsal', 'Just Futsal is a stunning turf overlooking Thrissur City. It is equipped with a state-of-the-art FIFA-standard synthetic turf and excellent lighting.', 'Shobha City Mall, Thrissur', 'assets\\images\\turf-images\\Just-Futsal-2.jpg', 1500.00, 'Available', 'assets\\images\\turf-images\\Just-Futsal-1.jpeg'),
+(8, 'Goal Castle', 'Vazhakkad and its neighbouring areas have produced many state and national players.Good for 5-a-side matches.', 'Vazhakkad, Kozhikode', 'assets\\images\\turf-images\\Goal-Castle-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\Goal-Castle-1.jpg'),
+(9, 'Sporthood Espirito', 'Sporthood Espirito was the first turf in Kakkanad area. It is easily accessible from Infopark, an IT park complex in Kochi.', 'Kakkanad, Kochi', 'assets\\images\\turf-images\\Sporthood-Espirito-2.jpg', 800.00, 'Available', 'assets\\images\\turf-images\\Sporthood-Espirito-1.jpeg'),
+(10, 'Cochin Sports Arena', 'Cochin Sports Arena is the biggest 7-a-side ground in the locality and easily accessible from main areas like Kakkanad, Palarivattom and Edapally', 'Edappally, Kochi', 'assets\\images\\turf-images\\Cochin-Sports-Arena-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\Cochin-Sports-Arena-1.jpeg'),
+(11, 'Calicut Arena', 'Calicut Arena is one of the best and biggest turfs in the city of Calicut. The arena has two independent courts; one for 7-a-side and one for 5-a-side.', 'Moozhikkal, Kozhikode', 'assets\\images\\turf-images\\Calicut-Arena-2.jpg', 1000.00, 'Available', 'assets\\images\\turf-images\\Calicut-Arena-1.jpeg');
 
 -- --------------------------------------------------------
 
@@ -346,7 +348,7 @@ ALTER TABLE `amenities`
 -- AUTO_INCREMENT for table `booking_list`
 --
 ALTER TABLE `booking_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `category_list`
